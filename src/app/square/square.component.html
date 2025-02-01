@@ -1,5 +1,5 @@
 <div
-    class="outer-container flex flex-col items-center justify-center h-screen bg-gradient-to-b from-[#406d8b] via-[#6fc291f3] to-[#b6f059be]">
+    class="outer-container flex flex-col items-center justify-center min-h-screen py-4 px-2 bg-gradient-to-b from-[#406d8b] via-[#6fc291f3] to-[#b6f059be]">
     <h2 *ngIf="newPage"
         class="text-[39px] cursor-default font-bold text-teal-800 font-poppins bg-gradient-to-t from-[#000000fd] to-teal-500 bg-clip-text text-transparent">
         Lets Play Tic Tac Toe</h2>
@@ -35,9 +35,9 @@
         class="px-8 py-4 text-xl mt-5 rounded-lg bg-gradient-to-r from-[#a1f1f7fd] to-teal-900 hover:border hover:border-[#a4b4af] hover:shadow-lg hover:shadow-emerald-900 text-gray-900 cursor-pointer"
         (click)="startGame()"> Start Game </button>
 
-    <main *ngIf="!champion && !gameDraw" class="grid grid-cols-3 md:mt-3 mt-5 md:gap-1.5 gap-0">
+    <main *ngIf="!champion && !gameDraw" class="grid grid-cols-3 max-w-3xl w-fit mx-auto md:mt-2 mt-3 md:gap-1 gap-0.5">
         <app-game-board *ngFor="let val of square; let i=index" [value]="val" (click)="makeMove(i)"
-            class="border border-gray-500 xl:w-56 xl:h-56 md:w-32 md:h-32 w-28 h-32 hover:bg-gray-300 transition duration-200">
+            class="border border-gray-500 xl:w-40 xl:h-40 md:w-24 md:h-24 w-20 h-20 hover:bg-gray-300 transition duration-200">
         </app-game-board>
     </main>
 </div>
