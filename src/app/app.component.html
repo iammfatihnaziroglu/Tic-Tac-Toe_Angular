@@ -1,1 +1,149 @@
-<app-square></app-square>
+<div class="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-amber-100 via-gray-300 to-yellow-500">
+  
+  <div class="w-full md:w-1/4 p-4 bg-gradient-to-b from-amber-800 to-yellow-900 shadow-lg">
+    <div class="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
+      <h2 class="text-2xl font-bold mb-4 text-center text-amber-100">Score Board</h2>
+      
+      <div class="text-center mb-6">
+        <span class="text-lg font-semibold text-amber-200">Round</span>
+        <span class="text-3xl font-bold text-amber-50 block mt-1">{{roundNumber}}</span>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div class="flex justify-between items-center bg-amber-700/30 p-3 rounded-lg">
+          <span class="text-xl font-semibold text-amber-200">X</span>
+          <span class="text-2xl font-bold text-amber-50">{{scoreX}}</span>
+        </div>
+        <div class="flex justify-between items-center bg-amber-700/30 p-3 rounded-lg">
+          <span class="text-xl font-semibold text-amber-200">O</span>
+          <span class="text-2xl font-bold text-amber-50">{{scoreO}}</span>
+        </div>
+      </div>
+
+      <button 
+        (click)="resetGame()"
+        class="w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-amber-50 font-bold rounded-lg transition-all"
+      >
+        {{gameWon ? 'New Game' : 'Reset'}}
+      </button>
+    </div>
+  </div>
+
+  
+  <div class="flex-1 relative">
+    
+    <div *ngIf="gameStarted && !gameWon" class="flex flex-col items-center justify-center min-h-screen p-4">
+     
+      <div class="status text-3xl font-bold mb-6 text-amber-800 animate-bounce">
+        <ng-container *ngIf="winner; else nextPlayer">
+          🎉 Player {{winner}} Wins!
+        </ng-container>
+        <ng-template #nextPlayer>
+          {{gameDraw ? '⚖️ Game Draw!' : 'Next Player: ' + (xIsNext ? 'X' : 'O')}}
+        </ng-template>
+      </div>
+
+      <app-game-board 
+        [board]="board"
+        (cellClick)="makeMove($event)"
+      ></app-game-board>
+
+     
+      <button 
+        *ngIf="gameDraw"
+        (click)="startExtraRound()"
+        class="mt-8 px-6 py-3 bg-amber-700 hover:bg-amber-800 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105"
+      >
+        Start Extra Round ➔
+      </button>
+
+      <button 
+        *ngIf="winner && !gameDraw"
+        (click)="nextRound()"
+        class="mt-8 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105"
+      >
+        Next Round ({{roundNumber + 1}})
+      </button>
+    </div>
+
+    
+    <div *ngIf="!gameStarted && !showTargetSelector" class="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div class="text-center bg-gradient-to-br from-amber-800 to-yellow-800 p-8 rounded-2xl border-2 border-amber-400 max-w-md w-full mx-4">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-200 mb-6">
+          Let's Play Tic Tac Toe!
+        </h1>
+        <button 
+          (click)="showTargetSelector = true"
+          class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-amber-50 font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-amber-500/30"
+        >
+          START GAME
+        </button>
+      </div>
+    </div>
+
+   
+    <div *ngIf="showTargetSelector" class="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div class="bg-gradient-to-br from-amber-800 to-yellow-800 p-8 rounded-2xl border-2 border-amber-400 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold text-amber-100 mb-6">Select Target Score</h2>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <button 
+            *ngFor="let target of winConditions"
+            (click)="selectedWinCondition = target"
+            [class]="selectedWinCondition === target 
+              ? 'bg-gradient-to-br from-amber-400 to-yellow-500 scale-110' 
+              : 'bg-amber-800 hover:bg-amber-700'"
+            class="p-2 text-amber-50 rounded-lg transition-all duration-200 transform hover:scale-105"
+          >
+            {{target}}
+          </button>
+        </div>
+        <button 
+          (click)="startGame()"
+          class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-amber-50 rounded-lg transition-all"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+
+
+    <div *ngIf="winner && !gameWon" class="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div class="text-center bg-gradient-to-br from-amber-800 to-yellow-800 p-8 rounded-2xl border-2 border-amber-400 max-w-md w-full">
+        <h2 class="text-3xl font-bold text-white mb-4">Round {{roundNumber}} Winner!</h2>
+        <p class="text-4xl font-bold text-amber-400 mb-6 animate-bounce">
+          Player {{winner}} 🏆
+        </p>
+        <div class="flex flex-col gap-3">
+          <button 
+            (click)="nextRound()"
+            class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-all font-bold"
+          >
+            Next Round ➔
+          </button>
+          <button 
+            (click)="resetGame()"
+            class="w-full py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all"
+          >
+            New Game
+          </button>
+        </div>
+      </div>
+    </div>
+
+   
+    <div *ngIf="gameWon" class="absolute inset-0 flex items-center justify-center bg-black/80 z-50">
+      <div class="text-center bg-gradient-to-br from-amber-800 to-yellow-800 p-8 rounded-2xl border-2 border-amber-400 max-w-md w-full">
+        <h2 class="text-3xl font-bold text-white mb-4">🏆 Tournament Winner! 🏆</h2>
+        <p class="text-4xl font-bold text-amber-400 mb-6 animate-bounce">
+          Player {{winner}}
+        </p>
+        <button 
+          (click)="resetGame()"
+          class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-all font-bold"
+        >
+          New Game
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

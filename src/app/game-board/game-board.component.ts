@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-game-board',
@@ -6,6 +6,10 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./game-board.component.css']
 })
 export class GameBoardComponent {
+  @Input() board!: string[];
+  @Output() cellClick = new EventEmitter<number>();
 
-  @Input() value : 'X' | 'O' | undefined
+  handleClick(index: number) {
+    this.cellClick.emit(index);
+  }
 }

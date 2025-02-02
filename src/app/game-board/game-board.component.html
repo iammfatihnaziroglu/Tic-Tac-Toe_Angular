@@ -1,3 +1,11 @@
-<button *ngIf="!value" class="w-full h-full md:text-4xl text-5xl bg-[#a1f1f7fd] xl:hover:bg-[#b6f059be] text-white border-none">{{value}}</button>
-<button *ngIf="value =='X'" class="w-full h-full md:text-4xl text-5xl bg-gradient-to-t from-[#c4dfd9] via-[#59f0e3be] to-[#336d77f3] text-white border-none">{{value}}</button>
-<button *ngIf="value =='O'" class="w-full h-full md:text-4xl text-5xl bg-gradient-to-b from-[#c4dfd9] via-[#5989f0be] to-[#333877f3] text-white border-none">{{value}}</button>
+<div class="game-board">
+  <div class="grid grid-cols-3 gap-2 w-fit mx-auto">
+    <button 
+      *ngFor="let cell of board; let i = index"
+      (click)="handleClick(i)"
+      class="w-20 h-20 md:w-24 md:h-24 xl:w-32 xl:h-32 bg-amber-100 hover:bg-amber-200 border-2 border-amber-400 rounded-lg text-4xl font-bold text-amber-800 transition-colors"
+    >
+      {{cell}}
+    </button>
+  </div>
+</div>
