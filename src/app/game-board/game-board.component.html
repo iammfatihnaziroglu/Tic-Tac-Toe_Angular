@@ -3,7 +3,7 @@
     <button 
       *ngFor="let cell of board; let i = index"
       (click)="handleClick(i)"
-      class="w-20 h-20 md:w-24 md:h-24 xl:w-32 xl:h-32 bg-amber-100 hover:bg-amber-200 border-2 border-amber-400 rounded-lg text-4xl font-bold text-amber-800 transition-colors"
+      class="w-20 h-20 md:w-24 md:h-24 xl:w-32 xl:h-32 bg-amber-100 border-2 border-amber-400 rounded-lg text-4xl font-bold text-amber-800 transition-colors"
     >
       {{cell}}
     </button>

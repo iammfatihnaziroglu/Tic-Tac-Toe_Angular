@@ -19,6 +19,7 @@ export class AppComponent {
   showTargetSelector = false;
   gameDraw = false;
   extraRoundCount = 0;
+  startingPlayer: 'X' | 'O' | null = null;
 
   getStatus(): string {
     if(this.winner) return `Winner: ${this.winner}`;
@@ -61,7 +62,9 @@ export class AppComponent {
 
   updateScore(winner: string): void {
     winner === 'X' ? this.scoreX++ : this.scoreO++;
-   
+    
+    this.startingPlayer = winner as 'X' | 'O';
+    
     if(this.scoreX >= this.selectedWinCondition || this.scoreO >= this.selectedWinCondition) {
       this.gameWon = true;
       this.gameStarted = false;
@@ -80,6 +83,7 @@ export class AppComponent {
     this.winner = null;
     this.gameStarted = false;
     this.board = Array(9).fill(null);
+    this.startingPlayer = null;
     this.xIsNext = true;
   }
 
@@ -96,6 +100,7 @@ export class AppComponent {
       this.gameStarted = true;
       this.showTargetSelector = false;
       this.resetBoard();
+      this.startingPlayer = null;
     }
   }
 
@@ -115,6 +120,11 @@ export class AppComponent {
     this.roundNumber++;
     this.resetBoard();
     this.winner = null;
+    this.gameDraw = false;
     this.gameStarted = true;
+    
+    this.xIsNext = this.startingPlayer ? 
+      (this.startingPlayer === 'X') : 
+      true;
   }
 }
